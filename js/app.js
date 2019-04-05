@@ -1,3 +1,5 @@
+//Global variables
+
 const $name = $('#name').val();
 const email = document.getElementById("mail");
 const card = document.getElementById("cc-num");

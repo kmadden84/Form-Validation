@@ -11,7 +11,7 @@ const $bitcoin = $('.credit-card + div + div');
 const $activities = $('.activities label input');
 const $colorDefault = $('#color').html();
 
-//Appending email validation error message, hidden by default
+//Appending email validation error message after required inputs, hidden by default
 
 $('<span style="display:none;" class="error">Please enter a valid email</span>').insertAfter(email);
 $('<span style="display:none;" class="error">Please enter a valid card number</span>').insertAfter(card);

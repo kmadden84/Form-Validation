@@ -11,7 +11,6 @@ const $costcontainer = $('<div class="total"></div>')
 const $paypal = $('.credit-card + div');
 const $bitcoin = $('.credit-card + div + div');
 const $creditcard = $('.credit-card');
-
 const $activities = $('.activities label input');
 const $colorDefault = $('#color').html();
 

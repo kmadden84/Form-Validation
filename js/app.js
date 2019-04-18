@@ -10,6 +10,8 @@ let $totalcost = 0;
 const $costcontainer = $('<div class="total"></div>')
 const $paypal = $('.credit-card + div');
 const $bitcoin = $('.credit-card + div + div');
+const $creditcard = $('.credit-card');
+
 const $activities = $('.activities label input');
 const $colorDefault = $('#color').html();
 
@@ -33,6 +35,7 @@ $('#payment').val('credit card');
 $bitcoin.hide();
 $paypal.hide();
 
+
 //Field Validation regexp (email, zip, CC, CVV)
 
 function validateEmail(email) {
@@ -40,7 +43,7 @@ function validateEmail(email) {
 }
 
 function validateCC(cardNumber) {
-    return /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(cardNumber); 
+    return /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(cardNumber);
 }
 
 function validateZip(zip) {
@@ -113,26 +116,39 @@ $('#title').on('change', function() {
     }
 });
 
-// show hide bitcoin and paypal messages as appropriate
+// show hide bitcoin and paypal messages as appropriate, and remove/add required class to cc fields when selected
 
 $('#payment').on('change', function() {
+    var $selectPayment = $('#payment option:eq(0)');
+    $selectPayment.hide();
+
     if ($(this).val() == 'paypal') {
         $bitcoin.hide();
+        $creditcard.hide();
         $paypal.show();
     } else if ($(this).val() == 'bitcoin') {
         $paypal.hide();
+        $creditcard.hide();
         $bitcoin.show();
     } else {
         $bitcoin.hide();
         $paypal.hide();
+        $creditcard.show();
+    }
+    if ($('#payment option[value="credit card"]').is(':selected')) {
+        $('input#cc-num, input#zip, input#cvv').addClass('required')
+    } else {
+        $('input#cc-num, input#zip, input#cvv').removeClass('required');
     }
 })
+        
+
 
 //Add, subtract activity total, hide conflicting activity time inputs
 
 $('.activities').append($costcontainer);
 $activities.on('change', function() {
-    $thisDate = $(this).parent().text().split('—').pop().split(',')[0];  //parse date as the text betwen - and ,
+    $thisDate = $(this).parent().text().split('—').pop().split(',')[0]; //parse date as the text betwen - and ,
     $cost = $(this).parent().text().split('$').pop(); //parse cost as anything following the dollar sign
     $cost = parseInt($cost); // convert cost to integer
     if ($(this).prop("checked") == true) { //if checkbox checked
@@ -145,8 +161,7 @@ $activities.on('change', function() {
     $('.total').html('<span>Total: $</span>' + $totalcost); // append cost
 });
 
-
-$('input[type="text"], input[type="email"]').addClass('required'); // add required class to all text and email inputs
+$('input#name, input[type="email"], input#cc-num, input#zip, input#cvv').addClass('required'); // add required class to all text and email inputs
 
 $('form').on('submit', function(e) { //run below code when user attemps to submit form
     var inputCheck = $(':checkbox:checked'); //find anything checked
@@ -158,15 +173,15 @@ $('form').on('submit', function(e) { //run below code when user attemps to submi
 
         // if required is blank, or at least one checkbox isn't cheched, or if a regexp warning is displayed
         if ($(this).val() == '' || $(inputCheck).length <= 0 || $(this).next('.error').css('display') == 'block') {
-            e.preventDefault();   // prevent form from submitting
+            e.preventDefault(); // prevent form from submitting
         }
         // if input is anything but name (because there's no regexp check on this), check for content and regexp errors and if none remove border
         if ($(this).val() != '' && $(this).next('.error').css('display') == 'none') {
-                $(this).css({ border: '0' });
+            $(this).css({ border: '0' });
         }
         // if input is name  check for content (but not regexp errors) and if none remove border
-         if ($(this).attr('id') == 'name' && $(this).val() != '') {
-                $(this).css({ border: '0' });
+        if ($(this).attr('id') == 'name' && $(this).val() != '') {
+            $(this).css({ border: '0' });
         }
     })
     // if there's a checkbox selected, add a border, if not remove it.  we don't need this inside the loop because we're looking for

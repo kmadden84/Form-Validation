@@ -108,12 +108,15 @@ $('#design').on('change', function() {
 
 // If other is selected for job, add an input to enter it
 
+$('#titleLabel, #otherInput').hide();
+
 $('#title').on('change', function() {
     if ($(this).val() == 'other') {
-        $('<label for="otherInput" id="titleLabel">Job Title:</label><input type="text" name="other" id="otherInput">').insertAfter('#title');
-    } else {
-        $('#titleLabel, #otherInput').hide();
-    }
+        $('#titleLabel, #otherInput').show();
+    } 
+     else {
+         $('#titleLabel, #otherInput').hide();
+     }
 });
 
 // show hide bitcoin and paypal messages as appropriate, and remove/add required class to cc fields when selected

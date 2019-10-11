@@ -1,0 +1,2 @@
+# Form Validation 
+A mock signup form which takes credit card info.  Credit card information entered must conform to standard credit-card format (VISA, MasterCard, Amex).  As well, required fields must be present, and certain fields are automatically hidden when others are selected.  A running total is calculated based on the events you sign up for.
